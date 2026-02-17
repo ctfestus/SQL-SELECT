@@ -13,7 +13,7 @@ interface PricingModalProps {
   planSettings?: PlanSettings | null;
 }
 
-const PAYSTACK_PUBLIC_KEY = process.env.PAYSTACK_PUBLIC_KEY || 'pk_live_76bf102897be4ffe9e803e6d510064a6bcb8fc1e';
+const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
 export const PricingModal: React.FC<PricingModalProps> = ({ user, currentTier, onClose, onUpgradeSuccess, planSettings }) => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');

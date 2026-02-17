@@ -1,0 +1,63 @@
+
+import React, { useEffect, useState } from 'react';
+import { Star } from 'lucide-react';
+
+interface XPToastProps {
+  points: number;
+  onClose: () => void;
+  className?: string;
+}
+
+const MESSAGES = [
+  "You are a superstar!",
+  "Keep up the great work!",
+  "SQL Master in the making!",
+  "Unstoppable!",
+  "Fantastic effort!",
+  "Leveling up!",
+  "Data wizardry!",
+  "Crushing it!",
+  "On fire!",
+  "Excellent job!"
+];
+
+export const XPToast: React.FC<XPToastProps> = ({ points, onClose, className = "top-24" }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setMessage(MESSAGES[Math.floor(Math.random() * MESSAGES.length)]);
+    const enterTimer = setTimeout(() => setIsVisible(true), 50);
+    
+    // Auto dismiss
+    const exitTimer = setTimeout(() => {
+        setIsVisible(false);
+        setTimeout(onClose, 300); // Wait for exit animation
+    }, 5000);
+
+    return () => { clearTimeout(enterTimer); clearTimeout(exitTimer); };
+  }, [onClose]);
+
+  return (
+    <div className={`fixed right-6 z-[200] transition-all duration-500 transform ${className} ${
+        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+    }`}>
+      <div className="bg-corp-dark border border-corp-orange/30 rounded-2xl shadow-[0_0_30px_rgba(255,153,51,0.3)] p-4 flex items-center gap-4 relative overflow-hidden backdrop-blur-xl min-w-[280px]">
+         
+         {/* Shiny effect */}
+         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+         <div className="absolute top-0 right-0 w-20 h-20 bg-corp-orange/20 rounded-full blur-xl -z-10"></div>
+
+         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-corp-orange to-red-500 flex items-center justify-center text-white shadow-lg shrink-0 animate-[bounce_1s_infinite]">
+            <Star size={24} className="fill-white" />
+         </div>
+         
+         <div className="pr-4">
+            <div className="text-[10px] font-black text-corp-orange uppercase tracking-widest mb-0.5">Reward Earned</div>
+            <div className="font-bold text-white text-lg leading-tight">+{points} XP</div>
+            <div className="text-xs text-slate-300 mt-0.5 font-medium">{message}</div>
+         </div>
+      </div>
+    </div>
+  );
+};

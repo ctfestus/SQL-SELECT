@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SELECT</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Pyodide for Python Execution -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <!-- PDF.js for Document Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      // Configure PDF.js Worker
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+    </script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Lato', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              corp: {
+                blue: '#1916c2',   // Main Background
+                dark: '#09069d',   // Container Background
+                orange: '#ff9933', // Accent 1
+                cyan: '#00a4ef',   // Accent 2
+                royal: '#0453f1',  // Accent 3
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #1916c2;
+        color: #e2e8f0;
+        font-family: 'Lato', sans-serif;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2); 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00a4ef; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #ff9933; 
+      }
+      
+      .glass-panel {
+        background-color: #09069d; /* Fallback */
+        background: rgba(9, 6, 157, 0.85); /* #09069d with opacity */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.469.0?deps=react@18.3.1",
+    "react-markdown": "https://esm.sh/react-markdown@9.0.1?deps=react@18.3.1,react-dom@18.3.1",
+    "remark-gfm": "https://esm.sh/remark-gfm@4.0.0",
+    "canvas-confetti": "https://esm.sh/canvas-confetti@1.9.2",
+    "@monaco-editor/react": "https://esm.sh/@monaco-editor/react@4.6.0?deps=react@18.3.1,react-dom@18.3.1",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.3",
+    "react-paystack": "https://esm.sh/react-paystack@5.0.0?deps=react@18.3.1",
+    "react-syntax-highlighter": "https://esm.sh/react-syntax-highlighter@15.5.0?deps=react@18.3.1",
+    "react-syntax-highlighter/dist/esm/styles/prism": "https://esm.sh/react-syntax-highlighter@15.5.0/dist/esm/styles/prism?deps=react@18.3.1",
+    "react-syntax-highlighter/": "https://esm.sh/react-syntax-highlighter@15.5.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

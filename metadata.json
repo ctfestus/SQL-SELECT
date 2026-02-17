@@ -1,0 +1,7 @@
+{
+  "name": "SQL - AI Naive SQL challenge_Final 2 + UPLOAD",
+  "description": "An industry-specific, interactive SQL technical assessment platform offering hands-on challenges for Beginner and Intermediate levels. pricing + ai tutor + user setting + admin + Bundle",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

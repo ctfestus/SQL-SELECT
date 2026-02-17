@@ -2,8 +2,8 @@
 import { supabase } from './supabaseClient';
 import { Certificate } from '../types';
 
-const HCTI_ID = import.meta.env.VITE_HCTI_ID;
-const HCTI_KEY = import.meta.env.VITE_HCTI_KEY;
+const HCTI_ID = import.meta.env.HCTI_ID;
+const HCTI_KEY = import.meta.env.HCTI_KEY;
 
 export const generateCertificate = async (userName: string, courseTitle: string, userId: string, industry: string): Promise<Certificate | null> => {
   try {

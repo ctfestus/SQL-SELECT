@@ -90,7 +90,7 @@ export const LiveSupportPanel: React.FC<LiveSupportPanelProps> = ({ challenge, i
   const connect = async () => {
     setIsConnecting(true);
     try {
-      const apiKey = process.env.API_KEY;
+      const apiKey = import.meta.env.GEMINI_API_KEY;
       if (!apiKey) throw new Error("API Key missing");
       const ai = new GoogleGenAI({ apiKey });
 

@@ -212,7 +212,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose, init
                 alt="Select Logo" 
                 className="w-20 h-20 object-contain" 
               />
-              <span className="text-xl font-bold tracking-tight">SELECT</span>
+              
             </div>
 
             {/* Middle Visual Artifact: Code Card */}

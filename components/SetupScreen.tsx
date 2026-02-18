@@ -90,7 +90,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                      alt="Select Logo" 
                      className="w-20 h-20  object-contain" 
                   />
-                  <span className="text-lg font-bold">SELECT</span>
                   </div>
                </button>
 

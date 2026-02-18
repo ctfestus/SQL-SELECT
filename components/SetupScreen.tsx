@@ -88,7 +88,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   <img 
                      src="https://oxksmvkuimqvagazbove.supabase.co/storage/v1/object/public/Assets/SELECTLOGO.png" 
                      alt="Select Logo" 
-                     className="w-10 h-10 rounded-xl object-contain" 
+                     className="w-20 h-20  object-contain" 
                   />
                   <span className="text-lg font-bold">SELECT</span>
                   </div>

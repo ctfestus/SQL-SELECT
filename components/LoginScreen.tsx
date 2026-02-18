@@ -210,7 +210,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose, init
               <img 
                 src="https://oxksmvkuimqvagazbove.supabase.co/storage/v1/object/public/Assets/SELECTLOGO.png" 
                 alt="Select Logo" 
-                className="w-12 h-12 object-contain" 
+                className="w-20 h-20 object-contain" 
               />
               <span className="text-xl font-bold tracking-tight">SELECT</span>
             </div>

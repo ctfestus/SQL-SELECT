@@ -83,11 +83,15 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
          <nav className="fixed top-0 w-full z-50 bg-corp-blue/90 backdrop-blur-lg border-b border-white/5">
             <div className="container mx-auto px-6 h-20 flex items-center justify-between relative">
                <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-3 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-corp-royal to-corp-cyan flex items-center justify-center shadow-lg shadow-corp-royal/20 relative">
-                     <ChevronRight size={24} className="text-white" />
-                     <Zap size={12} className="text-corp-orange fill-corp-orange absolute -top-1 -right-1" />
+                  {/* REPLACED LOGO */}
+                  <div className="flex items-center gap-3">
+                  <img 
+                     src="https://oxksmvkuimqvagazbove.supabase.co/storage/v1/object/public/Assets/SELECTLOGO.png" 
+                     alt="Select Logo" 
+                     className="w-10 h-10 rounded-xl object-contain" 
+                  />
+                  <span className="text-lg font-bold">SELECT</span>
                   </div>
-                  <span className="text-lg">SELECT</span>
                </button>
 
                <div className="hidden md:flex items-center gap-6 text-[15.5px] font-medium text-slate-300">

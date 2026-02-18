@@ -207,9 +207,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose, init
           <div className="relative z-10 flex flex-col h-full justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
-                <ChevronRight size={24} className="text-corp-cyan" />
-              </div>
+              <img 
+                src="https://oxksmvkuimqvagazbove.supabase.co/storage/v1/object/public/Assets/SELECTLOGO.png" 
+                alt="Select Logo" 
+                className="w-12 h-12 object-contain" 
+              />
               <span className="text-xl font-bold tracking-tight">SELECT</span>
             </div>
 

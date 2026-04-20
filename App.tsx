@@ -432,6 +432,8 @@ const App: React.FC = () => {
             }
         } catch(e) {
             console.error(e);
+            alert("Could not load challenge. Please try again.");
+            setState(prev => ({...prev, isComplete: true}));
         } finally {
             setIsLoading(false);
         }
@@ -479,7 +481,8 @@ const App: React.FC = () => {
                 }
 
                 if (module.challenge_json) {
-                    const ch = module.challenge_json;
+                    const raw = module.challenge_json as any;
+                    const ch = Array.isArray(raw) ? raw[0] : (raw['0'] ? raw['0'] : raw);
                     setCurrentChallenge({
                         ...ch,
                         id: module.id || index + 1000 
@@ -1467,10 +1470,10 @@ const App: React.FC = () => {
                                 <p className="text-white text-lg leading-7 font-medium">
                                     {currentChallenge.task}
                                 </p>
-                                {currentChallenge.requiredConcepts.length > 0 && (
+                                {(currentChallenge.requiredConcepts?.length ?? 0) > 0 && (
                                     <div className="mt-5 pt-4 border-t border-white/5">
                                     <span className="text-xs text-blue-300 mr-2 uppercase tracking-wide font-bold">Use Concepts:</span>
-                                    {currentChallenge.requiredConcepts.map(c => (
+                                    {(currentChallenge.requiredConcepts || []).map(c => (
                                         <span key={c} className="inline-block bg-corp-cyan/20 text-corp-cyan text-xs font-bold px-2 py-1 rounded border border-corp-cyan/30 mr-1.5 mb-1">
                                         {c}
                                         </span>

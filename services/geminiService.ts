@@ -548,12 +548,13 @@ export const generateCourseChallenge = async (
       }
     }));
 
-    const data = JSON.parse(response.text || "{}");
+    const raw = JSON.parse(response.text || "{}");
+    const data = Array.isArray(raw) ? raw[0] : raw;
     return {
       id: Date.now(),
       difficulty: item.difficulty as Difficulty,
       ...data,
-      type: type 
+      type: type
     };
   } catch (error) {
     console.error("Failed to generate course challenge", error);

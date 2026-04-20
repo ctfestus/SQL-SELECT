@@ -48,9 +48,9 @@ const SchemaTableViewer: React.FC<{ tables: SchemaTable[] }> = ({ tables }) => {
             <table className="w-full text-left text-sm border-collapse bg-[#05046e]">
               <thead>
                 <tr>
-                  {table.columns.map((col, cIdx) => (
+                  {table.columns.map((col: any, cIdx) => (
                     <th key={cIdx} className="border-b border-r border-white/10 bg-corp-blue/30 px-3 py-2 text-blue-100 font-mono text-xs font-semibold last:border-r-0 whitespace-nowrap">
-                      {col}
+                      {typeof col === 'string' ? col : col.name}
                     </th>
                   ))}
                 </tr>

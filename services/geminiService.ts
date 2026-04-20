@@ -469,82 +469,94 @@ export const generateCourseChallenge = async (
   type: ChallengeType = 'sql'
 ): Promise<Challenge> => {
   const ai = getAiClient();
-  
-  let instructions = `
-    Context:
-    - Domain: ${industry}
-    - Course Context: ${context}
-    - Module Title: ${item.title}
-    - Skill Focus: ${item.skillFocus}
-    - Task Description: ${item.taskDescription}
-    - Difficulty: ${item.difficulty}
-    
-    Generate a ${type.toUpperCase()} Challenge.
-  `;
 
-  if (type === 'mcq') {
-    instructions += `
-    Requirements for MCQ:
-    1. Create a multiple choice question testing the Skill Focus.
-    2. Provide 4 realistic options.
-    3. Indicate the correct answer.
-    4. No SQL schema is required for execution, but you can provide a small schema for context if needed.
-    `;
-  } else if (type === 'debug') {
-    instructions += `
-    Requirements for Debugging Task:
-    1. Provide a scenario and a specific task.
-    2. Provide 'initialCode' which MUST contain a broken/incorrect SQL query related to the task.
-    3. The query should have syntax errors or logical errors common for beginners.
-    4. Provide schema and data to test the fixed query.
-    `;
-  } else if (type === 'completion') {
-    instructions += `
-    Requirements for Code Completion:
-    1. Provide a scenario and a task.
-    2. Provide 'initialCode' which is a partial SQL query.
-    3. Use comments (e.g. -- TODO) or blanks to indicate missing parts.
-    4. Ensure indentation is proper (not one line).
-    5. Provide schema and data.
-    `;
-  } else {
-    instructions += `
-    Requirements for Standard SQL Task:
-    1. Provide scenario, task, schema, and data.
-    2. Task must be solvable with standard SQL.
-    `;
-  }
+  const typeInstructions: Record<string, string> = {
+    mcq: `Generate a Multiple Choice Question (MCQ):
+- Write a question that tests the Skill Focus concept in a realistic business context
+- Provide exactly 4 SQL query options where only ONE is correct
+- The wrong options should be plausible but have clear technical errors
+- Set correctAnswer to "A", "B", "C", or "D"
+- Provide a schema and sample data relevant to the question`,
 
-  const prompt = `
-    ${instructions}
+    debug: `Generate a Debugging Challenge:
+- Write a scenario where a broken SQL query needs to be fixed
+- initialCode MUST contain a realistic SQL error (wrong function args, syntax mistake, or logical flaw)
+- The error should be educational and relevant to the Skill Focus
+- Provide schema and sample data to test the corrected query`,
 
-    Output JSON Schema:
-    {
-      "title": "Professional Challenge Title",
-      "type": "${type}",
-      "scenario": "Business context...",
-      "task": "Instruction...",
-      "schema": [
-        {
-          "tableName": "users",
-          "columns": ["id", "name"],
-          "data": [ ["1", "Alice"] ]
-        }
-      ],
-      "requiredConcepts": ["list"],
-      "topic": "${item.skillFocus}",
-      "options": ["A", "B", "C", "D"], // Only for MCQ
-      "correctAnswer": "A", // Only for MCQ
-      "initialCode": "SELECT * FROM..." // Only for debug/completion
-    }
-  `;
+    completion: `Generate a Code Completion Challenge:
+- Write a scenario where a partial SQL query must be completed
+- initialCode MUST be a partial query using -- TODO: comments to mark missing parts
+- Use proper indentation across multiple lines (not a single line)
+- Provide schema and sample data`,
+
+    sql: `Generate a Standard SQL Challenge:
+- Write a clear business task that requires SQL to solve
+- Do NOT provide the solution query
+- If the Skill Focus does NOT mention JOIN, use a SINGLE table only`
+  };
+
+  const prompt = `You are a Senior SQL Instructor creating job-ready training content for a data analytics platform.
+
+CONTEXT:
+- Industry: ${industry}
+- Course Theme: ${context}
+- Module Title: ${item.title}
+- Skill Focus: ${item.skillFocus}
+- Task Description: ${item.taskDescription}
+- Difficulty: ${item.difficulty}
+- Challenge Type: ${type.toUpperCase()}
+
+INSTRUCTIONS:
+${typeInstructions[type] ?? typeInstructions.sql}
+
+CRITICAL SCHEMA RULES — follow exactly:
+- "columns" MUST be a flat array of plain strings: ["col1", "col2"]
+- WRONG format: [{"name":"id","type":"INT"}] — never use objects for columns
+- "data" MUST be a 2D array of strings: [["1","Alice"],["2","Bob"]]
+- Provide 5-8 rows of realistic sample data per table
+
+Return a single JSON object — NOT wrapped in an array.`;
+
+  const schemaProperties: any = {
+    title: { type: Type.STRING },
+    type: { type: Type.STRING },
+    scenario: { type: Type.STRING },
+    task: { type: Type.STRING },
+    topic: { type: Type.STRING },
+    schema: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          tableName: { type: Type.STRING },
+          columns: { type: Type.ARRAY, items: { type: Type.STRING } },
+          data: { type: Type.ARRAY, items: { type: Type.ARRAY, items: { type: Type.STRING } } }
+        },
+        required: ["tableName", "columns", "data"]
+      }
+    },
+    requiredConcepts: { type: Type.ARRAY, items: { type: Type.STRING } },
+    options: { type: Type.ARRAY, items: { type: Type.STRING } },
+    correctAnswer: { type: Type.STRING },
+    initialCode: { type: Type.STRING }
+  };
+
+  const required = ["title", "type", "scenario", "task", "topic", "schema", "requiredConcepts"];
+  if (type === 'mcq') required.push("options", "correctAnswer");
+  if (type === 'debug' || type === 'completion') required.push("initialCode");
 
   try {
     const response = await withRetry<GenerateContentResponse>(() => ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: schemaProperties,
+          required
+        }
       }
     }));
 
@@ -554,7 +566,7 @@ export const generateCourseChallenge = async (
       id: Date.now(),
       difficulty: item.difficulty as Difficulty,
       ...data,
-      type: type
+      type
     };
   } catch (error) {
     console.error("Failed to generate course challenge", error);
